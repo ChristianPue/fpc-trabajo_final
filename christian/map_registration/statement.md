@@ -36,7 +36,7 @@ bob2
 
 ## 🛠️ Recomendaciones
 
-El uso de un **mapa hash (HashMap / `unordered_map`)** es ideal para llevar el conteo eficiente de cuántas veces se ha registrado cada nombre. Esto asegura una solución con **tiempo lineal** respecto a la cantidad de nombres.
+El uso de **map** es ideal para llevar un registro eficiente de los nombres y sus conteos, asegurando una solución con tiempo de búsqueda y actualización eficiente. Sin embargo, se recomienda considerar el uso de **unordered_map** para mejorar aún más la eficiencia, ya que ofrece un tiempo constante promedio para las operaciones de inserción, eliminación y búsqueda.
 
 ## 🧵 Ruta del archivo fuente:
 

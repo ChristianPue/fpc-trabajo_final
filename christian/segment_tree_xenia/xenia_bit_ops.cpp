@@ -1,58 +1,52 @@
 #include <iostream>
 #include <vector>
-#include <cmath>
 using namespace std;
-
-struct Node {
-  int value;
-  Node(int v = 0) : value(v) {}
-};
-
-// Determina si aplicar OR o XOR según la profundidad actual
-Node ope(Node a, Node b, int depth) {
-  if (depth % 2 == 0) {
-    return Node(a.value ^ b.value);
-  } else {
-    return Node(a.value | b.value);
-  }
-}
 
 struct SegmentTree {
   int n;
-  vector<Node> tree;
-  int levels;
+  vector<int> tree;
+  bool toggle; // true -> or, false -> xor
 
   SegmentTree(const vector<int>& arr) {
     n = arr.size();
-    levels = __builtin_ctz(n); // log2(n)
     tree.resize(2 * n);
-    build(arr);
-  }
-  
-  void build(const vector<int>& arr) {
     for (int i = 0; i < n; ++i) {
-      tree[n + i] = Node(arr[i]);
+      tree[n + i] = arr[i];
     }
+    toggle = (int)(__builtin_ctz(n)) % 2 == 1; // nivel raíz
+    build();
+  }
+
+  void build() {
+    bool op = toggle;
     for (int i = n - 1; i >= 1; --i) {
-      int depth = levels - __builtin_ctz(i);
-
-      tree[i] = ope(tree[i << 1], tree[i << 1 | 1], depth);
+      if (op) { 
+        tree[i] = tree[i << 1] | tree[i << 1 | 1]; 
+      }
+      else {
+        tree[i] = tree[i << 1] ^ tree[i << 1 | 1];
+      }
+      if ((i & (i - 1)) == 0) // si i es potencia de 2, cambia de nivel
+      { op = !op; }
     }
   }
 
-  void update(int index, int value) {
-    index += n;
-    tree[index] = Node(value);
-    while (index > 1) {
-      index >>= 1;
-      
-      int depth = levels - __builtin_ctz(index);
-      tree[index] = ope(tree[index << 1], tree[index << 1 | 1], depth);
+  void update(int idx, int value) {
+    idx += n;
+    tree[idx] = value;
+    bool op = toggle;
+    while (idx > 1) {
+      idx >>= 1;
+      if (op)
+        { tree[idx] = tree[idx << 1] | tree[idx << 1 | 1]; }
+      else
+        { tree[idx] = tree[idx << 1] ^ tree[idx << 1 | 1]; }
+      op = !op;
     }
   }
-  
+
   int result() const {
-    return tree[1].value;
+    return tree[1];
   }
 };
 
@@ -62,24 +56,20 @@ int main() {
 
   int m, q;
   cin >> m >> q;
-  
   int n = 1 << m;
   vector<int> arr(n);
-  
   for (int i = 0; i < n; ++i) {
     cin >> arr[i];
   }
-  
+
   SegmentTree st(arr);
-  
+
   while (q--) {
     int p, b;
     cin >> p >> b;
-    
     st.update(p - 1, b);
-    
     cout << st.result() << '\n';
   }
-  
-  return 0;
+
+    return 0;
 }
