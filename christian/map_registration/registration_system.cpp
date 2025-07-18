@@ -8,32 +8,27 @@ int main() {
   int n;
   cin >> n;
 
-  map<string, int> registrados; // Mapa para almacenar nombres y su conteo
+  // Mapa que almacena la cantidad de veces que se ha usado cada nombre base
+  map<string, int> registrados;
 
-  while (n--)
-  {
+  while (n--) {
     string nombre;
     cin >> nombre;
 
-    // Verificar si el nombre ya está registrado
+    // Si el nombre no está registrado aún (valor por defecto es 0)
     if (registrados[nombre] == 0) {
-      cout << "OK" << endl; // Nombre nuevo
-      registrados[nombre] = 1 ; // Marcar como registrado
-    }
-    else {
-      // Generar un nuevo nombre
-      int contador = registrados[nombre];
-      string nuevoNombre;
-      
-      // Buscar un nuevo nombre que no esté registrado
-      do {
-        nuevoNombre = nombre + to_string(contador);
-        contador++;
-      } while (registrados[nuevoNombre] > 0);
-      
-      cout << nuevoNombre << endl; // Imprimir el nuevo nombre
-      registrados[nuevoNombre] = 1; // Marcar el nuevo nombre como registrado
-      registrados[nombre] = contador; // Actualizar el contador para el nombre base
+      cout << "OK" << endl;        // Se acepta tal cual
+      registrados[nombre] = 1;     // Se marca como registrado
+    } else {
+      // Ya existe el nombre, se crea una sugerencia única
+      string nuevoNombre = nombre + to_string(registrados[nombre]);
+      cout << nuevoNombre << endl;
+
+      // Se marca el nuevo nombre como usado (no se volverá a usar esa sugerencia)
+      registrados[nuevoNombre] = 1;
+
+      // Incrementamos el contador del nombre original para que la siguiente sugerencia avance
+      registrados[nombre]++;
     }
   }
 

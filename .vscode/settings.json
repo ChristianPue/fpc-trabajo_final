@@ -5,6 +5,8 @@
     "xlocinfo": "cpp",
     "xstring": "cpp",
     "xutility": "cpp",
-    "iostream": "cpp"
+    "iostream": "cpp",
+    "unordered_map": "cpp",
+    "algorithm": "cpp"
   }
 }

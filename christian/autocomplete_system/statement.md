@@ -41,3 +41,4 @@ input('i') → ["i love you", "island", "i love leetcode"]
 input(' ') → ["i love you", "i love leetcode"]
 input('a') → []
 input('#') → []
+```
